@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPokemon, getPokemonDetails } from "./api/index";
+import { UnknownAction } from "redux";
+import { getPokemon } from "./api/index";
 import "./App.css";
 import { PokemonList } from "./components/PokemonList";
 import { Search } from "./components/Search";
-import { setPokemons } from "./store/actions";
+import { getPokemonsWithDetails } from "./store/actions";
 
 // { pokemons, setPokemons }
 function App() {
@@ -15,13 +16,13 @@ function App() {
     try {
       const fetchPokemon = async () => {
         const data = await getPokemon();
-        const pokemonDetailed = await Promise.all(
-          data.map(async (pokemon: any) => {
-            const response = await getPokemonDetails(pokemon.url);
-            return response;
-          })
-        );
-        dispatch(setPokemons(pokemonDetailed));
+        // const pokemonDetailed = await Promise.all(
+        //   data.map(async (pokemon: any) => {
+        //     const response = await getPokemonDetails(pokemon.url);
+        //     return response;
+        //   })
+        // );
+        dispatch(getPokemonsWithDetails(data) as unknown as UnknownAction);
       };
       fetchPokemon();
     } catch (error) {
