@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPokemon } from "./api/index";
+import { getPokemon, getPokemonDetails } from "./api/index";
 import "./App.css";
 import { PokemonList } from "./components/PokemonList";
 import { Search } from "./components/Search";
@@ -15,7 +15,13 @@ function App() {
     try {
       const fetchPokemon = async () => {
         const data = await getPokemon();
-        dispatch(setPokemons(data));
+        const pokemonDetailed = await Promise.all(
+          data.map(async (pokemon: any) => {
+            const response = await getPokemonDetails(pokemon.url);
+            return response;
+          })
+        );
+        dispatch(setPokemons(pokemonDetailed));
       };
       fetchPokemon();
     } catch (error) {
@@ -31,8 +37,8 @@ function App() {
         pokemons={pokemons.map((pokemon: any, index: number) => ({
           id: index,
           name: pokemon.name,
-          image: ``,
-          type: pokemon.type,
+          image: pokemon.sprites.front_default,
+          type: pokemon.types.map((type: any) => type.type.name).join(", "),
         }))}
       />
     </div>

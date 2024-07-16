@@ -13,3 +13,8 @@ export const getPokemon = async () => {
   const { data } = await pokeApi.get("/pokemon/?limit=150");
   return data.results;
 };
+
+export const getPokemonDetails = async (url: string) => {
+  const { data } = await axios.get(url);
+  return data;
+};
