@@ -31,7 +31,7 @@ function App() {
         pokemons={pokemons.map((pokemon: any, index: number) => ({
           id: index,
           name: pokemon.name,
-          image: `https://pokeres.bastionbot.org/images/pokemon/${index + 1}.png`,
+          image: ``,
           type: pokemon.type,
         }))}
       />
