@@ -6,7 +6,16 @@ import App from "./App.tsx";
 import "./index.css";
 import { pokemonsReducer } from "./store/reducers/pokemons.ts";
 
-const store = createStore(pokemonsReducer);
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION__: any;
+  }
+}
+
+const store = createStore(
+  pokemonsReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
