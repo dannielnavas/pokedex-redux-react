@@ -14,7 +14,8 @@ const PokemonList = ({ pokemons }: PokemonListProps) => {
           name={pokemon.name}
           image={pokemon.image}
           type={pokemon.type}
-          id={0}
+          id={pokemon.id}
+          isFavorite={pokemon.isFavorite}
         />
       ))}
     </div>
