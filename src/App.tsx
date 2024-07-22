@@ -11,8 +11,8 @@ import { SET_LOADING } from "./store/actions/types";
 // { pokemons, setPokemons }
 function App() {
   // const [pokemons, setPokemons] = useState([]);
-  const pokemons = useSelector((state: any) => state.pokemons);
-  const loading = useSelector((state: any) => state.loading);
+  const pokemons = useSelector((state: any) => state.get("pokemons")).toJS();
+  const loading = useSelector((state: any) => state.get("loading"));
   const dispatch = useDispatch();
   useEffect(() => {
     try {

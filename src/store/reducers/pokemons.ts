@@ -1,5 +1,6 @@
 /* eslint-disable no-case-declarations */
 
+import { fromJS, get } from "immutable";
 import { SET_LOADING, SET_POKEMONS, SET_POKEMOS_FAVORITES } from "../actions/types";
 
 interface Pokemon {
@@ -8,40 +9,41 @@ interface Pokemon {
   // Add other properties of the Pokemon object
 }
 
-const initialState = {
+const initialState = fromJS({
   pokemons: [] as Pokemon[],
   loading: false,
-};
+});
 
 export const pokemonsReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_POKEMONS:
-      return {
-        ...state,
-        pokemons: action.payload,
-      };
+      // return {
+      //   ...state,
+      //   pokemons: action.payload,
+      // };
+      return state.setIn(["pokemons"], fromJS(action.payload));
+    // case SET_LOADING:
+    //   return {
+    //     ...state,
+    //     loading: action.payload,
+    //   };
     case SET_LOADING:
-      return {
-        ...state,
-        loading: action.payload,
-      };
+      return state.setIn(["loading"], action.payload);
     case SET_POKEMOS_FAVORITES:
-      const newPokemonList = [...state.pokemons];
-      const currentPokemonIndex = newPokemonList.findIndex(
-        (pokemon) => pokemon.id === action.payload.pokemonId
-      );
+      const pokemons = get(state, "pokemons");
+      const currentPokemonIndex = Array.isArray(pokemons)
+        ? pokemons.findIndex(
+            (pokemon) => pokemon.get("id") === action.payload.pokemonId
+          )
+        : -1;
 
-      if (currentPokemonIndex < 0) {
+      if (currentPokemonIndex !== undefined && currentPokemonIndex < 0) {
         return state;
       }
-      newPokemonList[currentPokemonIndex].favorite =
-        !newPokemonList[currentPokemonIndex].favorite;
-
-      return {
-        ...state,
-        pokemons: newPokemonList,
-      };
-
+      return state.setIn(
+        ["pokemons", currentPokemonIndex, "favorite"],
+        !state.getIn(["pokemons", currentPokemonIndex, "favorite"])
+      );
     default:
       return state;
   }
