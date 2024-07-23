@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 
 import { fromJS, get } from "immutable";
-import { SET_LOADING, SET_POKEMONS, SET_POKEMOS_FAVORITES } from "../actions/types";
+import { SET_POKEMONS, SET_POKEMOS_FAVORITES } from "../actions/types";
 
 interface Pokemon {
   favorite: boolean;
@@ -11,7 +11,6 @@ interface Pokemon {
 
 const initialState = fromJS({
   pokemons: [] as Pokemon[],
-  loading: false,
 });
 
 export const pokemonsReducer = (state = initialState, action) => {
@@ -27,8 +26,7 @@ export const pokemonsReducer = (state = initialState, action) => {
     //     ...state,
     //     loading: action.payload,
     //   };
-    case SET_LOADING:
-      return state.setIn(["loading"], action.payload);
+
     case SET_POKEMOS_FAVORITES:
       const pokemons = get(state, "pokemons");
       const currentPokemonIndex = Array.isArray(pokemons)

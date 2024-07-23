@@ -6,7 +6,7 @@ import { thunk } from "redux-thunk";
 import App from "./App.tsx";
 import "./index.css";
 import { logger } from "./middlewares/index.ts";
-import { pokemonsReducer } from "./store/reducers/pokemons.ts";
+import { rootReducer } from "./store/reducers/rootReducer.ts";
 
 declare global {
   interface Window {
@@ -20,7 +20,7 @@ const composedEnhancers = compose(
     (window as any).__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-const store = createStore(pokemonsReducer, composedEnhancers);
+const store = createStore(rootReducer, composedEnhancers);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

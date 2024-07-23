@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { UnknownAction } from "redux";
 import { getPokemon } from "./api/index";
 import "./App.css";
@@ -11,8 +11,10 @@ import { SET_LOADING } from "./store/actions/types";
 // { pokemons, setPokemons }
 function App() {
   // const [pokemons, setPokemons] = useState([]);
-  const pokemons = useSelector((state: any) => state.get("pokemons")).toJS();
-  const loading = useSelector((state: any) => state.get("loading"));
+  const pokemons = useSelector((state: any) =>
+    state.getIn(["data", "pokemons"], shallowEqual)
+  ).toJS();
+  const loading = useSelector((state: any) => state.getIn(["ui", "loading"]));
   const dispatch = useDispatch();
   useEffect(() => {
     try {
@@ -42,12 +44,23 @@ function App() {
         <article aria-busy="true"></article>
       ) : (
         <PokemonList
-          pokemons={pokemons.map((pokemon: any, index: number) => ({
-            id: index,
-            name: pokemon.name,
-            image: pokemon.sprites.front_default,
-            type: pokemon.types.map((type: any) => type.type.name).join(", "),
-          }))}
+          pokemons={pokemons.map(
+            (
+              pokemon: {
+                name: string;
+                sprites: { front_default: string };
+                types: { type: { name: string } }[];
+              },
+              index: number
+            ) => ({
+              id: index,
+              name: pokemon.name,
+              image: pokemon.sprites.front_default,
+              type: pokemon.types
+                .map((type: { type: { name: string } }) => type.type.name)
+                .join(", "),
+            })
+          )}
         />
       )}
     </div>
