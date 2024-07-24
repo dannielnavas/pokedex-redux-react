@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setPokemonsFavorites } from "../../store/actions";
+import { setFavorite } from "../../slices/dataSlice";
 import { StarButton } from "../StarButton";
 export interface PokemonCardProps {
   id: number;
@@ -13,7 +13,7 @@ const PokemonCard = ({ image, name, type, id, isFavorite }: PokemonCardProps) =>
   const dispatch = useDispatch();
 
   const handleOfFavorite = () => {
-    dispatch(setPokemonsFavorites({ pokemonId: id }));
+    dispatch(setFavorite({ pokemonId: id }));
   };
   return (
     <article style={{ width: 330 }}>

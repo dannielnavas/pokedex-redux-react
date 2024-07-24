@@ -1,39 +1,44 @@
 import { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { UnknownAction } from "redux";
-import { getPokemon } from "./api/index";
 import "./App.css";
 import { PokemonList } from "./components/PokemonList";
 import { Search } from "./components/Search";
-import { getPokemonsWithDetails } from "./store/actions";
-import { SET_LOADING } from "./store/actions/types";
+import { fetchPokemonWithDetails } from "./slices/dataSlice";
 
 // { pokemons, setPokemons }
 function App() {
   // const [pokemons, setPokemons] = useState([]);
-  const pokemons = useSelector((state: any) =>
-    state.getIn(["data", "pokemons"], shallowEqual)
-  ).toJS();
-  const loading = useSelector((state: any) => state.getIn(["ui", "loading"]));
+  // const pokemons = useSelector((state: any) =>
+  //   state.getIn(["data", "pokemons"], shallowEqual)
+  // ).toJS();
+  const pokemons = useSelector((state: any) => state.data?.pokemons, shallowEqual);
+  // const loading = useSelector((state: any) => state.getIn(["ui", "loading"]));
+
+  const loading = useSelector((state: any) => state.ui.loading);
   const dispatch = useDispatch();
   useEffect(() => {
-    try {
-      const fetchPokemon = async () => {
-        dispatch({ type: SET_LOADING, payload: true });
-        const data = await getPokemon();
-        // const pokemonDetailed = await Promise.all(
-        //   data.map(async (pokemon: any) => {
-        //     const response = await getPokemonDetails(pokemon.url);
-        //     return response;
-        //   })
-        // );
-        dispatch(getPokemonsWithDetails(data) as unknown as UnknownAction);
-        dispatch({ type: SET_LOADING, payload: false });
-      };
-      fetchPokemon();
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    // const fetchPokemon = async () => {
+    //   dispatch({ type: SET_LOADING, payload: true });
+    //   const data = await getPokemon();
+    // const pokemonDetailed = await Promise.all(
+    //   data.map(async (pokemon: any) => {
+    //     const response = await getPokemonDetails(pokemon.url);
+    //     return response;
+    //   })
+    // );
+    //     dispatch(getPokemonsWithDetails(data) as unknown as UnknownAction);
+    //     dispatch({ type: SET_LOADING, payload: false });
+    //   };
+    //   fetchPokemon();
+    // } catch (error) {
+    //   console.error(error);
+    // }
+
+    // reduc thunk
+
+    dispatch(fetchPokemonWithDetails() as unknown as UnknownAction);
   }, []);
 
   console.log(pokemons);
@@ -44,7 +49,7 @@ function App() {
         <article aria-busy="true"></article>
       ) : (
         <PokemonList
-          pokemons={pokemons.map(
+          pokemons={pokemons?.map(
             (
               pokemon: {
                 name: string;

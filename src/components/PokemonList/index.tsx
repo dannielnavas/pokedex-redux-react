@@ -8,7 +8,7 @@ interface PokemonListProps {
 const PokemonList = ({ pokemons }: PokemonListProps) => {
   return (
     <div className="container-list">
-      {pokemons.map((pokemon: PokemonCardProps) => (
+      {pokemons?.map((pokemon: PokemonCardProps) => (
         <PokemonCard
           key={pokemon.id}
           name={pokemon.name}
